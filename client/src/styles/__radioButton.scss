@@ -1,0 +1,31 @@
+@import "./variables.scss";
+
+.radio-item-container {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0rem 0.5rem 0rem;
+
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+  }
+
+  .check-box {
+    height: 1.2rem;
+    width: 1.2rem;
+    margin-right: 0.5rem;
+    background-color: $text-default-color;
+    border-radius: 50%;
+  }
+
+  .check-box-active {
+    @extend .check-box;
+    background-color: $highlight-color;
+  }
+}

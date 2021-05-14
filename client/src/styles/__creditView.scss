@@ -1,0 +1,12 @@
+@import "./variables.scss";
+
+.credit-view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  span {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+}

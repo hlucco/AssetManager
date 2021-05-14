@@ -1,0 +1,75 @@
+import React, { Ref, RefObject, useEffect } from "react";
+import { Chart } from "chart.js";
+import colorList from "../resources/colorList.json";
+
+interface PropsGraph {
+  chartId: string;
+  type: string;
+  labels?: string[];
+  centerText?: string;
+  data: number[];
+}
+
+function Graph(props: PropsGraph) {
+  let chartRef: RefObject<HTMLCanvasElement> = React.createRef();
+
+  useEffect(() => {
+    chartRef.current!.getContext("2d");
+
+    new Chart(chartRef.current!, {
+      type: props.type,
+      data: {
+        labels: props.labels,
+        datasets: [
+          {
+            data: props.data,
+            backgroundColor: colorList,
+            borderColor: colorList,
+          },
+        ],
+      },
+      options: {
+        legend: {
+          display: false,
+        },
+        cutoutPercentage: 75,
+        animation: {
+          animateRotate: false,
+        },
+      },
+    });
+
+    //Custom center text for dougnut charts
+    if (props.type === "doughnut") {
+      Chart.pluginService.register({
+        beforeDraw: function (chart) {
+          let width = chart.width,
+            height = chart.height,
+            ctx = chart.ctx;
+
+          ctx!.restore();
+          let fontSize = (height! / 200).toFixed(2);
+          ctx!.font = fontSize + "em 'Bahnschrift', sans-serif";
+          ctx!.fillStyle = "#B5B5B5";
+          ctx!.textBaseline = "middle";
+
+          let text = `${props.centerText}`,
+            textX = Math.round((width! - ctx!.measureText(text).width) / 2),
+            textY = height! / 2;
+
+          ctx!.clearRect(textX - 100, textY - 100, 400, 400);
+          ctx!.fillText(text, textX, textY);
+          ctx!.save();
+        },
+      });
+    }
+  });
+
+  return (
+    <div className="chart-container">
+      <canvas id={props.chartId} ref={chartRef} />
+    </div>
+  );
+}
+
+export default Graph;
