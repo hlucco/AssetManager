@@ -14,3 +14,7 @@ This application uses connectors to call external APIs in order to keep data up 
 
 - [Coinbase id & secret](https://developers.coinbase.com/api/v2)
 - [Plaid id & secret](https://plaid.com/docs/quickstart/)
+
+## Demo
+
+- https://drive.google.com/file/d/1Ln7Ciz6LYXqX1D4PHDbmjArBD8cE8xSU/view?usp=sharing
