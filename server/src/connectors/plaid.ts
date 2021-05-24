@@ -1,4 +1,5 @@
 import express from "express";
+import keys from "../../keys";
 import plaid from "plaid";
 
 const router = express.Router();
@@ -21,8 +22,8 @@ const PLAID_COUNTRY_CODES = (process.env.PLAID_COUNTRY_CODES || "US").split(
 );
 
 export const client = new plaid.Client({
-  clientID: PLAID_CLIENT_ID,
-  secret: PLAID_SECRET,
+  clientID: keys.plaid_client_id,
+  secret: keys.plaid_client_secret,
   env: plaid.environments[PLAID_ENV],
   options: {},
 });

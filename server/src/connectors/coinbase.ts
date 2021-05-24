@@ -1,10 +1,12 @@
 import axios, { AxiosResponse } from "axios";
 import express from "express";
+import keys from "../../keys";
 
 const router = express.Router();
 
 router.post("/request", (req, res) => {
-  const clientId = process.env.coinbase_id;
+  const clientId =
+    "6211ec47d1b3f707173971fcc5a3616693f0293cbdcad76f78ddd68d64cfa11f";
   const name = req.body.name;
   const assetClass = req.body.class;
   const redirectUri = encodeURIComponent(
@@ -20,8 +22,8 @@ router.post("/exchange", async (req, res) => {
   const coinbaseBody = {
     grant_type: "authorization_code",
     code: req.body.code,
-    client_id: process.env.coinbase_id,
-    client_secret: process.env.coinbase_secret,
+    client_id: keys.coinbase_client_id,
+    client_secret: keys.coinbase_client_secret,
     redirect_uri: `http://localhost:6020/?name=${name}&asset_class=${assetClass}`,
   };
 
@@ -36,5 +38,19 @@ router.post("/exchange", async (req, res) => {
 
   res.send(response.data);
 });
+
+export async function etherToUSD() {
+  const response = await axios.get(
+    "https://api.coinbase.com/v2/exchange-rates?currency=ETH"
+  );
+  return response.data.data.rates.USD;
+}
+
+export async function bitcoinToUSD() {
+  const response = await axios.get(
+    "https://api.coinbase.com/v2/exchange-rates?currency=BTC"
+  );
+  return response.data.data.rates.USD;
+}
 
 export default router;

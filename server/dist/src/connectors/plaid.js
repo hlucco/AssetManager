@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.client = void 0;
 const express_1 = __importDefault(require("express"));
+const keys_1 = __importDefault(require("../../keys"));
 const plaid_1 = __importDefault(require("plaid"));
 const router = express_1.default.Router();
 const PLAID_CLIENT_ID = process.env.PLAID_CLIENT_ID;
@@ -18,8 +19,8 @@ const PLAID_PRODUCTS = (process.env.PLAID_PRODUCTS || "transactions").split(",")
 // will be able to select institutions from.
 const PLAID_COUNTRY_CODES = (process.env.PLAID_COUNTRY_CODES || "US").split(",");
 exports.client = new plaid_1.default.Client({
-    clientID: PLAID_CLIENT_ID,
-    secret: PLAID_SECRET,
+    clientID: keys_1.default.plaid_client_id,
+    secret: keys_1.default.plaid_client_secret,
     env: plaid_1.default.environments[PLAID_ENV],
     options: {},
 });

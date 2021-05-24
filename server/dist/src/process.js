@@ -16,6 +16,7 @@ exports.processAccount = void 0;
 const plaid_1 = require("./connectors/plaid");
 const utils_1 = require("./utils");
 const axios_1 = __importDefault(require("axios"));
+const coinbase_1 = require("./connectors/coinbase");
 // export async function processAssetClass(assetClass: AssetClass): Promise<AssetClass> {
 //     let totalValue: number = 0;
 //     for (let i = 0; i < assetClass.accounts.length; i++) {
@@ -49,15 +50,21 @@ function processAccount(account) {
             let newTokenObject = yield utils_1.refreshCoinbaseToken(oldTokenObject);
             const config = {
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${newTokenObject.accessToken}`
-                }
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${newTokenObject.accessToken}`,
+                },
             };
             let response = yield axios_1.default.get(`https://api.coinbase.com/v2/accounts`, config);
             let accountDetails = response.data;
-            let bitCoinValue = yield utils_1.bitcoinUSD();
+            let bitCoinValue = yield coinbase_1.bitcoinToUSD();
+            let etherValue = yield coinbase_1.etherToUSD();
             accountDetails.data.forEach((j) => {
-                totalValue += (j.balance.amount * bitCoinValue);
+                if (j.currency.code === "BTC") {
+                    totalValue += j.balance.amount * bitCoinValue;
+                }
+                else if (j.currency.code === "ETH") {
+                    totalValue += j.balance.amount * etherValue;
+                }
             });
             account = Object.assign(Object.assign({}, account), { accountDetails: accountDetails, totalBalance: totalValue });
         }
