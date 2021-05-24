@@ -5,8 +5,7 @@ import keys from "../../keys";
 const router = express.Router();
 
 router.post("/request", (req, res) => {
-  const clientId =
-    "6211ec47d1b3f707173971fcc5a3616693f0293cbdcad76f78ddd68d64cfa11f";
+  const clientId = keys.coinbase_client_id;
   const name = req.body.name;
   const assetClass = req.body.class;
   const redirectUri = encodeURIComponent(
