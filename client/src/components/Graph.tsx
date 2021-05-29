@@ -8,6 +8,8 @@ interface PropsGraph {
   labels?: string[];
   centerText?: string;
   data: number[];
+  height?: number;
+  width?: number;
 }
 
 function Graph(props: PropsGraph) {
@@ -32,6 +34,7 @@ function Graph(props: PropsGraph) {
         legend: {
           display: false,
         },
+        aspectRatio: 1,
         cutoutPercentage: 75,
         animation: {
           animateRotate: false,
@@ -67,7 +70,12 @@ function Graph(props: PropsGraph) {
 
   return (
     <div className="chart-container">
-      <canvas id={props.chartId} ref={chartRef} />
+      <canvas
+        id={props.chartId}
+        ref={chartRef}
+        height={props.height}
+        width={props.width}
+      />
     </div>
   );
 }

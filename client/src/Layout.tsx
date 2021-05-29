@@ -63,15 +63,27 @@ function Layout(props: PropsLayout) {
         <IconMenu />
       </div>
       <div className="container">
-        <Legend data={props.assetClasses} total={total} />
-        <Graph
-          chartId="assetChart"
-          type="doughnut"
-          labels={data.labels}
-          centerText={data.total}
-          data={data.values}
-        />
-        <CreditView />
+        <div className="card">
+          <div className="card-content">
+            <div className="card-item">
+              <Legend data={props.assetClasses} total={total} />
+            </div>
+            <div className="card-item">
+              <Graph
+                chartId="assetChart"
+                type="doughnut"
+                labels={data.labels}
+                centerText={data.total}
+                data={data.values}
+                width={600}
+                height={600}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="card">
+          <CreditView />
+        </div>
       </div>
     </div>
   );
