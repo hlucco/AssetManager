@@ -3,9 +3,10 @@
 .card {
   background-color: $card-background;
   box-shadow: $cardshadowII;
-  border-radius: 5px;
-  padding: 2rem;
-  //   transition: 0.25s;
+  border-radius: 15px;
+  padding: 2rem 3rem 2rem 3rem;
+  margin: 0.5rem 1rem 0.5rem 1rem;
+  align-items: center;
 
   &:hover {
     // transform: scale(1.01);

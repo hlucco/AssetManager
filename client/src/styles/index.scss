@@ -39,11 +39,11 @@ body {
 
 .container {
   display: flex;
-  justify-content: space-evenly;
-  flex-direction: column;
-  align-items: center;
-  padding: 0 2rem 0 2rem;
-  height: 100vh;
+  // justify-content: space-evenly;
+  // flex-direction: column;
+  // align-items: center;
+  padding: 4rem 4rem 4rem 4rem;
+  // height: 100vh;
 }
 
 .legend-container {
@@ -216,4 +216,20 @@ body {
 .button-primary {
   height: 2rem;
   cursor: pointer;
+}
+
+.menu-item-circle {
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.class-color-picker-container {
+  position: absolute;
+  margin-top: 1rem;
+  margin-left: -11rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
 }

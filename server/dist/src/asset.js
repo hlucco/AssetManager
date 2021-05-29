@@ -17,13 +17,13 @@ const mongodb_1 = __importDefault(require("mongodb"));
 // import { processAssetClass } from "./process";
 const router = express_1.default.Router();
 const url = process.env.MONGO_URL;
-const dbName = 'PortfolioManagerDB';
+const dbName = "PortfolioManagerDB";
 //Get all asset classes for a given account
-router.get('/', (req, res) => {
+router.get("/", (req, res) => {
     mongodb_1.default.connect(url, (error, client) => {
         if (error === null) {
             const db = client.db(dbName);
-            const collectionAssetClasses = db.collection('assetClasses');
+            const collectionAssetClasses = db.collection("assetClasses");
             collectionAssetClasses.find({}).toArray((err, data) => __awaiter(void 0, void 0, void 0, function* () {
                 res.json(data);
             }));
@@ -34,22 +34,26 @@ router.get('/', (req, res) => {
         client.close();
     });
 });
-router.post('/', (req, res) => {
+router.post("/", (req, res) => {
     mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
         console.log("connected to mongo client");
         if (error === null) {
             const db = client.db(dbName);
-            const collectionAssetClasses = db.collection('assetClasses');
+            const collectionAssetClasses = db.collection("assetClasses");
             const newClass = req.body;
-            let existing = yield collectionAssetClasses.findOne({ name: newClass.name });
+            let existing = yield collectionAssetClasses.findOne({
+                name: newClass.name,
+            });
             if (existing !== null) {
                 //already exists
-                res.status(400).send('Already exists');
+                res.status(400).send("Already exists");
             }
             else {
                 //make a new one
                 yield collectionAssetClasses.insertOne(newClass);
-                yield collectionAssetClasses.find({}).toArray((err, data) => {
+                yield collectionAssetClasses
+                    .find({})
+                    .toArray((err, data) => {
                     res.json(data);
                 });
             }
@@ -60,21 +64,49 @@ router.post('/', (req, res) => {
         client.close();
     }));
 });
-router.delete('/:assetId', (req, res) => {
+router.put("/:assetId", (req, res) => {
     mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
         if (error === null) {
             const db = client.db(dbName);
-            const collectionAssetClasses = db.collection('assetClasses');
+            const collectionAssetClasses = db.collection("assetClasses");
+            const assetId = req.params.assetId;
+            let existing = yield collectionAssetClasses.findOne({ id: assetId });
+            if (existing === null) {
+                //asset class does not exist already exists
+                res.status(400).send("Class does not exist");
+            }
+            let updatedClass = req.body;
+            delete updatedClass._id;
+            yield collectionAssetClasses.updateOne({ id: assetId }, { $set: updatedClass });
+            yield collectionAssetClasses
+                .find({})
+                .toArray((err, data) => {
+                res.json(data);
+            });
+        }
+        else {
+            console.log(error);
+        }
+        client.close();
+    }));
+});
+router.delete("/:assetId", (req, res) => {
+    mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
+        if (error === null) {
+            const db = client.db(dbName);
+            const collectionAssetClasses = db.collection("assetClasses");
             const assetId = req.params.assetId;
             let existing = yield collectionAssetClasses.findOne({ id: assetId });
             if (existing === null) {
                 //already exists
-                res.status(404).send('Class does not exist');
+                res.status(404).send("Class does not exist");
             }
             else {
                 //delete
                 yield collectionAssetClasses.deleteOne({ id: assetId });
-                yield collectionAssetClasses.find({}).toArray((err, data) => {
+                yield collectionAssetClasses
+                    .find({})
+                    .toArray((err, data) => {
                     res.json(data);
                 });
             }

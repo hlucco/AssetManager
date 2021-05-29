@@ -10,9 +10,32 @@ interface PropsGraph {
   data: number[];
   height?: number;
   width?: number;
+  colors: string[];
 }
 
 function Graph(props: PropsGraph) {
+  const centerTextPlugin = {
+    beforeDraw: function (chart: any) {
+      let width = chart.width,
+        height = chart.height,
+        ctx = chart.ctx;
+
+      ctx!.restore();
+      let fontSize = (height! / 200).toFixed(2);
+      ctx!.font = fontSize + "em 'Bahnschrift', sans-serif";
+      ctx!.fillStyle = "#B5B5B5";
+      ctx!.textBaseline = "middle";
+
+      let text = `${props.centerText}`,
+        textX = Math.round((width! - ctx!.measureText(text).width) / 2),
+        textY = height! / 2;
+
+      ctx!.clearRect(textX - 100, textY - 100, 400, 400);
+      ctx!.fillText(text, textX, textY);
+      ctx!.save();
+    },
+  };
+
   let chartRef: RefObject<HTMLCanvasElement> = React.createRef();
 
   useEffect(() => {
@@ -25,11 +48,12 @@ function Graph(props: PropsGraph) {
         datasets: [
           {
             data: props.data,
-            backgroundColor: colorList,
-            borderColor: colorList,
+            backgroundColor: props.colors,
+            borderColor: props.colors,
           },
         ],
       },
+      plugins: props.centerText ? [centerTextPlugin] : [],
       options: {
         legend: {
           display: false,
@@ -41,31 +65,6 @@ function Graph(props: PropsGraph) {
         },
       },
     });
-
-    //Custom center text for dougnut charts
-    if (props.type === "doughnut") {
-      Chart.pluginService.register({
-        beforeDraw: function (chart) {
-          let width = chart.width,
-            height = chart.height,
-            ctx = chart.ctx;
-
-          ctx!.restore();
-          let fontSize = (height! / 200).toFixed(2);
-          ctx!.font = fontSize + "em 'Bahnschrift', sans-serif";
-          ctx!.fillStyle = "#B5B5B5";
-          ctx!.textBaseline = "middle";
-
-          let text = `${props.centerText}`,
-            textX = Math.round((width! - ctx!.measureText(text).width) / 2),
-            textY = height! / 2;
-
-          ctx!.clearRect(textX - 100, textY - 100, 400, 400);
-          ctx!.fillText(text, textX, textY);
-          ctx!.save();
-        },
-      });
-    }
   });
 
   return (

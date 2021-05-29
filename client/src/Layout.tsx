@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import AssetsView from "./components/AssetsView";
 import CreditView from "./components/CreditView";
 import Flyout from "./components/Flyout";
 import Graph from "./components/Graph";
@@ -17,22 +18,6 @@ interface PropsLayout {
 
 function Layout(props: PropsLayout) {
   const dispatch = useAppDispatch();
-
-  let total = 0;
-  props.assetClasses.forEach((i) => {
-    total += i.totalValue;
-  });
-  let totalString = `$${Math.round(total).toString()}`;
-
-  const data = {
-    labels: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.name),
-    values: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.totalValue),
-    total: totalString,
-  };
 
   useEffect(() => {
     const asyncHandler = async () => {
@@ -63,27 +48,8 @@ function Layout(props: PropsLayout) {
         <IconMenu />
       </div>
       <div className="container">
-        <div className="card">
-          <div className="card-content">
-            <div className="card-item">
-              <Legend data={props.assetClasses} total={total} />
-            </div>
-            <div className="card-item">
-              <Graph
-                chartId="assetChart"
-                type="doughnut"
-                labels={data.labels}
-                centerText={data.total}
-                data={data.values}
-                width={600}
-                height={600}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="card">
-          <CreditView />
-        </div>
+        <AssetsView />
+        <CreditView />
       </div>
     </div>
   );
