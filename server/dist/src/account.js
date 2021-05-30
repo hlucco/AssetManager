@@ -17,7 +17,7 @@ const mongodb_1 = __importDefault(require("mongodb"));
 const process_1 = require("./process");
 const utils_1 = require("./utils");
 const url = process.env.MONGO_URL;
-const dbName = 'PortfolioManagerDB';
+const dbName = "PortfolioManagerDB";
 const router = express_1.default.Router();
 router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let newAccount = {
@@ -26,24 +26,33 @@ router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function*
         asset_class: req.body.asset_class,
         accountDetails: {},
         totalBalance: 0,
-        id: req.body.id
+        id: req.body.id,
     };
     yield utils_1.saveAccessToken(newAccount.id, req.body.access_token, req.body.refresh_token);
     newAccount = yield process_1.processAccount(newAccount);
     mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
         if (error === null) {
             const db = client.db(dbName);
-            const collectionAssetClasses = db.collection('assetClasses');
-            let existing = yield collectionAssetClasses.findOne({ name: newAccount.asset_class });
+            const collectionAssetClasses = db.collection("assetClasses");
+            let existing = yield collectionAssetClasses.findOne({
+                name: newAccount.asset_class,
+            });
             if (existing === null) {
                 //asset class does not exist already exists
-                res.status(400).send('Class does not exist');
+                res.status(400).send("Class does not exist");
             }
             else {
                 const newAccounts = existing.accounts;
                 newAccounts.push(newAccount);
-                yield collectionAssetClasses.updateOne({ name: newAccount.asset_class }, { $set: { accounts: newAccounts, totalValue: existing.totalValue + newAccount.totalBalance } });
-                yield collectionAssetClasses.find({}).toArray((err, data) => {
+                yield collectionAssetClasses.updateOne({ name: newAccount.asset_class }, {
+                    $set: {
+                        accounts: newAccounts,
+                        totalValue: existing.totalValue + newAccount.totalBalance,
+                    },
+                });
+                yield collectionAssetClasses
+                    .find({})
+                    .toArray((err, data) => {
                     res.json(data);
                 });
             }
@@ -58,24 +67,68 @@ router.get("/update/:accountId/:assetId", (req, res) => __awaiter(void 0, void 0
     mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
         if (error === null) {
             const db = client.db(dbName);
-            const collectionAssetClasses = db.collection('assetClasses');
-            let existing = yield collectionAssetClasses.findOne({ id: req.params.assetId });
+            const collectionAssetClasses = db.collection("assetClasses");
+            let existing = yield collectionAssetClasses.findOne({
+                id: req.params.assetId,
+            });
             if (existing === null) {
                 //asset class does not exist already exists
-                res.status(400).send('Class does not exist');
+                res.status(400).send("Class does not exist");
             }
             else {
                 let newAccounts = existing.accounts;
-                let updatedAccount = existing.accounts.find(account => account.id === req.params.accountId);
+                let updatedAccount = existing.accounts.find((account) => account.id === req.params.accountId);
                 let index = newAccounts.indexOf(updatedAccount);
                 let newTotalValue = existing.totalValue - updatedAccount.totalBalance;
                 updatedAccount = yield process_1.processAccount(updatedAccount);
                 newAccounts[index] = updatedAccount;
-                yield collectionAssetClasses.updateOne({ id: req.params.assetId }, { $set: { accounts: newAccounts, totalValue: newTotalValue + updatedAccount.totalBalance } });
-                yield collectionAssetClasses.find({}).toArray((err, data) => {
+                yield collectionAssetClasses.updateOne({ id: req.params.assetId }, {
+                    $set: {
+                        accounts: newAccounts,
+                        totalValue: newTotalValue + updatedAccount.totalBalance,
+                    },
+                });
+                yield collectionAssetClasses
+                    .find({})
+                    .toArray((err, data) => {
                     res.json(data);
                 });
             }
+        }
+        else {
+            console.log(error);
+        }
+        client.close();
+    }));
+}));
+router.get("/refresh", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
+        if (error === null) {
+            const db = client.db(dbName);
+            const collectionAssetClasses = db.collection("assetClasses");
+            let assetClasses = yield collectionAssetClasses.find({}).toArray();
+            for (let i = 0; i < assetClasses.length; i++) {
+                let total = 0;
+                let newAccounts = assetClasses[i].accounts;
+                for (let j = 0; j < newAccounts.length; j++) {
+                    let updatedAccount = yield process_1.processAccount(newAccounts[j]);
+                    total += updatedAccount.totalBalance;
+                    console.log("total updated");
+                    console.log(updatedAccount.totalBalance);
+                    newAccounts[j] = updatedAccount;
+                }
+                yield collectionAssetClasses.updateOne({ id: assetClasses[i].id }, {
+                    $set: {
+                        accounts: newAccounts,
+                        totalValue: total,
+                    },
+                });
+            }
+            yield collectionAssetClasses
+                .find({})
+                .toArray((err, data) => {
+                res.json(data);
+            });
         }
         else {
             console.log(error);
@@ -87,27 +140,31 @@ router.delete("/:accountId/:assetId", (req, res) => {
     mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
         if (error === null) {
             const db = client.db(dbName);
-            const collectionAssetClasses = db.collection('assetClasses');
+            const collectionAssetClasses = db.collection("assetClasses");
             const assetId = req.params.assetId;
-            let existing = yield collectionAssetClasses.findOne({ id: assetId });
+            let existing = yield collectionAssetClasses.findOne({
+                id: assetId,
+            });
             if (existing === null) {
                 //already exists
-                res.status(404).send('Class does not exist');
+                res.status(404).send("Class does not exist");
             }
             else {
                 //delete
-                let accountToDelete = existing.accounts.find(i => i.id === req.params.accountId);
-                let updatedAccounts = existing.accounts.filter(i => i.id !== req.params.accountId);
+                let accountToDelete = existing.accounts.find((i) => i.id === req.params.accountId);
+                let updatedAccounts = existing.accounts.filter((i) => i.id !== req.params.accountId);
                 const newValue = existing.totalValue - accountToDelete.totalBalance;
                 yield collectionAssetClasses.updateOne({ id: assetId }, { $set: { accounts: updatedAccounts, totalValue: newValue } });
-                yield collectionAssetClasses.find({}).toArray((err, data) => {
+                yield collectionAssetClasses
+                    .find({})
+                    .toArray((err, data) => {
                     res.json(data);
                 });
             }
         }
         else {
             console.log(error);
-            res.status(404).send('Account not found');
+            res.status(404).send("Account not found");
         }
         client.close();
     }));

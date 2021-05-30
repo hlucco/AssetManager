@@ -6,4 +6,5 @@ export interface AssetClass {
   accounts: PortfolioAccount[];
   totalValue: number;
   color: string;
+  userid: string;
 }

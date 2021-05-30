@@ -9,17 +9,17 @@ const plaid_1 = __importDefault(require("./connectors/plaid"));
 const asset_1 = __importDefault(require("./asset"));
 const account_1 = __importDefault(require("./account"));
 const coinbase_1 = __importDefault(require("./connectors/coinbase"));
+const user_1 = __importDefault(require("./user"));
 const port = 6023;
 const app = express_1.default();
 app.use(body_parser_1.default.json());
 //Controllers
-app.use('/plaid', plaid_1.default);
-app.use('/assets', asset_1.default);
-app.use('/account', account_1.default);
-app.use('/coinbase', coinbase_1.default);
+app.use("/plaid", plaid_1.default);
+app.use("/assets", asset_1.default);
+app.use("/account", account_1.default);
+app.use("/coinbase", coinbase_1.default);
+app.use("/user", user_1.default);
 app.listen(port, () => {
     console.log(`Server listening at port ${port}`);
 });
-//next:
-// - plaid configuration and setup
 //# sourceMappingURL=index.js.map

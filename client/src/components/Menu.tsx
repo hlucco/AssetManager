@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import AccountsMenuView from "./AccountsMenuView";
-import { AssetClass } from "../models/assetClass";
 import ClassesMenuview from "./ClassesMenuView";
 import IconDollar from "./icons/IconDollar";
 import IconLayers from "./icons/IconLayers";
+import IconSync from "./icons/iconSync";
+import ToggleSwitch from "./ToggleSwitch";
+import { RootState } from "../store/store";
+import { connect } from "react-redux";
 
-function Menu() {
+interface PropsMenu {}
+
+function Menu(props: PropsMenu) {
   const [view, setView] = useState("menu");
 
   useEffect(() => {
@@ -35,9 +40,27 @@ function Menu() {
             <IconLayers />
             <span>Classes</span>
           </div>
+          <div className="menu-item">
+            <div className="sync-toggle">
+              <div className="sync-container">
+                <IconSync />
+                <span>Sync</span>
+              </div>
+              <ToggleSwitch
+                checked={true}
+                onChange={() => {
+                  // dispatch(updateUserSync)
+                }}
+              />
+            </div>
+          </div>
         </div>
       );
   }
 }
 
-export default Menu;
+function mapStateToProps(state: RootState) {
+  return { assetClasses: state.classReducer.assetClasses };
+}
+
+export default connect(mapStateToProps)(Menu);

@@ -3,6 +3,7 @@ interface PropsTextInput {
   type: string;
   inputOnChange: any;
   label?: string;
+  placeholder?: string;
 }
 
 function TextInput(props: PropsTextInput) {
@@ -20,6 +21,7 @@ function TextInput(props: PropsTextInput) {
           name=""
           value={props.textValue}
           onChange={props.inputOnChange}
+          placeholder={props.placeholder}
         />
         {!!props.label ? <label>{props.label}</label> : null}
         <span></span>

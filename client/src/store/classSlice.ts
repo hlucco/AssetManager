@@ -67,6 +67,11 @@ export const updateAccount = createAsyncThunk(
   }
 );
 
+export const refreshAll = createAsyncThunk("/api/assets", async () => {
+  const response = await axios.get("/api/account/refresh");
+  return response.data;
+});
+
 export interface ClassState {
   assetClasses: AssetClass[];
   loadingAccountId: string;

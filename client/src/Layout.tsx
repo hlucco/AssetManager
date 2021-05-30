@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import AccountListView from "./components/AccountListView";
 import AssetsView from "./components/AssetsView";
 import CreditView from "./components/CreditView";
 import Flyout from "./components/Flyout";
 import Graph from "./components/Graph";
 import IconMenu from "./components/icons/IconMenu";
-import Legend from "./components/Legend";
+import Login from "./components/Login";
 import Menu from "./components/Menu";
 import { AssetClass } from "./models/assetClass";
 import { fetchClasses } from "./store/classSlice";
@@ -18,6 +19,7 @@ interface PropsLayout {
 
 function Layout(props: PropsLayout) {
   const dispatch = useAppDispatch();
+  const token = false;
 
   useEffect(() => {
     const asyncHandler = async () => {
@@ -36,6 +38,10 @@ function Layout(props: PropsLayout) {
 
   const [menuVisible, toggleMenu] = useState(false);
 
+  if (!token) {
+    return <Login />;
+  }
+
   return (
     <div className="root">
       <Flyout visible={menuVisible} toggleFlyout={toggleMenu}>
@@ -50,6 +56,7 @@ function Layout(props: PropsLayout) {
       <div className="container">
         <AssetsView />
         <CreditView />
+        <AccountListView />
       </div>
     </div>
   );

@@ -6,6 +6,9 @@
 @import "./accountMenu.scss";
 @import "./_radioButton";
 @import "./_card";
+@import "./accountList.scss";
+@import "./_toggleswitch";
+@import "./login.scss";
 
 body {
   background-color: $background-color;
@@ -39,7 +42,7 @@ body {
 
 .container {
   display: flex;
-  // justify-content: space-evenly;
+  justify-content: center;
   // flex-direction: column;
   // align-items: center;
   padding: 4rem 4rem 4rem 4rem;
@@ -87,6 +90,7 @@ body {
 
     h1 {
       margin-left: 1rem;
+      margin-right: 1.5rem;
     }
   }
 
@@ -232,4 +236,16 @@ body {
   border-radius: 5px;
   display: flex;
   flex-direction: column;
+}
+
+.sync-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sync-toggle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
