@@ -6,6 +6,7 @@ const keys = {
     plaid_client_id: "602b5ca1f8afb000116b8113",
     plaid_client_secret: "fecb62889f8b5f3b68b023a80f1abb",
     plaid_client_sandbox: "e2dd1050bd687d812c95d94c637f8e",
+    jwt_secret_key: "9b5f235b76cb4afeb178be5957904526",
 };
 exports.default = keys;
 //# sourceMappingURL=keys.js.map

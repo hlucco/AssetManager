@@ -5,13 +5,18 @@ import IconDollar from "./icons/IconDollar";
 import IconLayers from "./icons/IconLayers";
 import IconSync from "./icons/iconSync";
 import ToggleSwitch from "./ToggleSwitch";
-import { RootState } from "../store/store";
+import { RootState, useAppDispatch } from "../store/store";
 import { connect } from "react-redux";
+import IconLogout from "./icons/IconLogout";
+import { logout, updateUserSync } from "../store/userSlice";
 
-interface PropsMenu {}
+interface PropsMenu {
+  userInfo: any;
+}
 
 function Menu(props: PropsMenu) {
   const [view, setView] = useState("menu");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -40,19 +45,18 @@ function Menu(props: PropsMenu) {
             <IconLayers />
             <span>Classes</span>
           </div>
-          <div className="menu-item">
+          <div className="menu-item" onClick={() => dispatch(updateUserSync())}>
             <div className="sync-toggle">
               <div className="sync-container">
                 <IconSync />
                 <span>Sync</span>
               </div>
-              <ToggleSwitch
-                checked={true}
-                onChange={() => {
-                  // dispatch(updateUserSync)
-                }}
-              />
+              <ToggleSwitch checked={props.userInfo.sync} onChange={() => {}} />
             </div>
+          </div>
+          <div onClick={() => dispatch(logout())} className="menu-item">
+            <IconLogout />
+            <span>Logout</span>
           </div>
         </div>
       );
@@ -60,7 +64,10 @@ function Menu(props: PropsMenu) {
 }
 
 function mapStateToProps(state: RootState) {
-  return { assetClasses: state.classReducer.assetClasses };
+  return {
+    assetClasses: state.classReducer.assetClasses,
+    userInfo: state.userReducer.userInfo,
+  };
 }
 
 export default connect(mapStateToProps)(Menu);

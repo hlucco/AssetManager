@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 
   .login-card {
     background-color: $card-background;
@@ -50,4 +51,34 @@
   span {
     margin: 0 0.5rem 0 0.5rem;
   }
+}
+
+.banner {
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  border-radius: 5px;
+  position: absolute;
+  top: 1rem;
+  box-shadow: $cardshadow;
+  display: flex;
+  align-items: center;
+
+  .icon {
+    height: 22px;
+    margin: 0rem 0.7rem 0 0;
+
+    svg {
+      height: 22px;
+      width: 22px;
+    }
+  }
+}
+
+.success {
+  background-color: $green;
+  color: $white;
+}
+
+.failure {
+  background-color: $red;
+  color: $white;
 }

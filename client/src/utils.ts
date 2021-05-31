@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export function useOutsideAlerter(ref: any, handler: any) {
   useEffect(() => {
@@ -18,4 +18,32 @@ export function useOutsideAlerter(ref: any, handler: any) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [ref]);
+}
+
+export function getToken() {
+  const tokenString = sessionStorage.getItem("token");
+  return tokenString;
+}
+
+export function clearSession() {
+  sessionStorage.clear();
+}
+
+export function useToken() {
+  const getToken = () => {
+    const tokenString = sessionStorage.getItem("token");
+    return tokenString;
+  };
+
+  const [token, setToken] = useState(getToken());
+
+  const saveToken = (userToken: string) => {
+    sessionStorage.setItem("token", userToken);
+    setToken(userToken);
+  };
+
+  return {
+    setToken: saveToken,
+    token,
+  };
 }

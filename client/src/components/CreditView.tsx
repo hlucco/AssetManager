@@ -13,9 +13,14 @@ function CreditView(props: PropsCreditView) {
     props.assetClasses.filter((i) => i.name === "Credit")[0] || {};
   let totalBalance = Math.abs(creditClass.totalValue);
 
+  console.log(creditClass);
+
   let limit;
 
-  if (Object.keys(creditClass).length !== 0) {
+  if (
+    Object.keys(creditClass).length !== 0 &&
+    creditClass.accounts.length !== 0
+  ) {
     limit = (props.assetClasses.filter((i) => i.name === "Credit")[0] || {})
       .accounts[0].accountDetails.accounts[0].balances.limit;
   }

@@ -1,69 +1,49 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
-import AccountListView from "./components/AccountListView";
-import AssetsView from "./components/AssetsView";
-import CreditView from "./components/CreditView";
-import Flyout from "./components/Flyout";
-import Graph from "./components/Graph";
-import IconMenu from "./components/icons/IconMenu";
+import App from "./App";
 import Login from "./components/Login";
-import Menu from "./components/Menu";
 import { AssetClass } from "./models/assetClass";
-import { fetchClasses } from "./store/classSlice";
-import { RootState, useAppDispatch } from "./store/store";
+import store, { RootState, useAppDispatch } from "./store/store";
+import { loggedIn } from "./store/userSlice";
 import "./styles/index.scss";
+import { useToken } from "./utils";
 
 interface PropsLayout {
   assetClasses: AssetClass[];
+  loggedIn: boolean;
+  logInStatus: string;
 }
 
 function Layout(props: PropsLayout) {
   const dispatch = useAppDispatch();
-  const token = false;
 
   useEffect(() => {
     const asyncHandler = async () => {
-      await dispatch(fetchClasses());
+      dispatch(loggedIn());
     };
+
     asyncHandler();
-
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
-    //handle coinbase connector redirect
-    if (urlParams.has("name")) {
-      toggleMenu(true);
-    }
   }, []);
 
-  const [menuVisible, toggleMenu] = useState(false);
+  const { token, setToken } = useToken();
 
-  if (!token) {
-    return <Login />;
+  if (props.logInStatus === "idle") {
+    return <div></div>;
   }
 
-  return (
-    <div className="root">
-      <Flyout visible={menuVisible} toggleFlyout={toggleMenu}>
-        <Menu />
-      </Flyout>
-      <div
-        onClick={() => toggleMenu(!menuVisible)}
-        className="menu-button-container"
-      >
-        <IconMenu />
-      </div>
-      <div className="container">
-        <AssetsView />
-        <CreditView />
-        <AccountListView />
-      </div>
-    </div>
-  );
+  if (!token || !props.loggedIn) {
+    return <Login setToken={setToken} />;
+  } else {
+    return <App />;
+  }
 }
 
 function mapStateToProps(state: RootState) {
-  return { assetClasses: state.classReducer.assetClasses };
+  return {
+    assetClasses: state.classReducer.assetClasses,
+    loggedIn: state.userReducer.loggedIn,
+    logInStatus: state.userReducer.status,
+  };
 }
 
 export default connect(mapStateToProps)(Layout);
