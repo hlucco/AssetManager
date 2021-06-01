@@ -27,6 +27,12 @@ function App(props: PropsApp) {
     const asyncHandler = async () => {
       await dispatch(fetchClasses());
       await dispatch(getUserInfo());
+
+      if (props.userInfo.sync) {
+        setInterval(() => {
+          dispatch(refreshAll());
+        }, 300000);
+      }
     };
 
     asyncHandler();
@@ -39,12 +45,6 @@ function App(props: PropsApp) {
       toggleMenu(true);
     }
   }, []);
-
-  if (props.userInfo.sync) {
-    setInterval(() => {
-      dispatch(refreshAll());
-    }, 300000);
-  }
 
   const [menuVisible, toggleMenu] = useState(false);
 
