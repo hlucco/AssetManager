@@ -47,3 +47,21 @@ export function useToken() {
     token,
   };
 }
+
+export function getMonths(count: number) {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return months.slice(0, count);
+}

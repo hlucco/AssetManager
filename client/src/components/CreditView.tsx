@@ -35,7 +35,7 @@ function CreditView(props: PropsCreditView) {
               type="doughnut"
               labels={["Balance", "Remaining"]}
               centerText={`$${totalBalance.toString()}`}
-              data={[totalBalance, limit]}
+              data={[totalBalance, limit - totalBalance]}
               colors={[creditClass.color, "#191819"]}
               width={300}
               height={300}

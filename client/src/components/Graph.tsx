@@ -10,6 +10,7 @@ interface PropsGraph {
   data: number[];
   height?: number;
   width?: number;
+  fill?: boolean;
   colors: string[];
 }
 
@@ -50,6 +51,7 @@ function Graph(props: PropsGraph) {
             data: props.data,
             backgroundColor: props.colors,
             borderColor: props.colors,
+            fill: props.fill,
           },
         ],
       },
@@ -63,6 +65,28 @@ function Graph(props: PropsGraph) {
         animation: {
           animateRotate: false,
         },
+
+        scales:
+          props.type === "line"
+            ? {
+                yAxes: [
+                  {
+                    ticks: {
+                      fontColor: "#b5b5b5",
+                      // stepSize: 1,
+                      // beginAtZero: true,
+                    },
+                  },
+                ],
+                xAxes: [
+                  {
+                    ticks: {
+                      fontColor: "#b5b5b5",
+                    },
+                  },
+                ],
+              }
+            : {},
       },
     });
   });

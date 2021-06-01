@@ -11,6 +11,8 @@ import { fetchClasses, refreshAll } from "./store/classSlice";
 import { getToken } from "./utils";
 import axios from "axios";
 import { connect } from "react-redux";
+import NetView from "./components/NetView";
+import { userInfo } from "node:os";
 
 interface PropsApp {
   userInfo: any;
@@ -38,6 +40,12 @@ function App(props: PropsApp) {
     }
   }, []);
 
+  if (props.userInfo.sync) {
+    setInterval(() => {
+      dispatch(refreshAll());
+    }, 300000);
+  }
+
   const [menuVisible, toggleMenu] = useState(false);
 
   return (
@@ -55,6 +63,7 @@ function App(props: PropsApp) {
         <AssetsView />
         <CreditView />
         <AccountListView />
+        <NetView />
       </div>
     </div>
   );
