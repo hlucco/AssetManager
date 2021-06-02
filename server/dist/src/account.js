@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const mongodb_1 = __importDefault(require("mongodb"));
 const process_1 = require("./process");
 const utils_1 = require("./utils");
+const tracker_1 = require("./tracker");
 const url = process.env.MONGO_URL;
 const dbName = "PortfolioManagerDB";
 const router = express_1.default.Router();
@@ -106,24 +107,7 @@ router.get("/refresh", (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (error === null) {
             const db = client.db(dbName);
             const collectionAssetClasses = db.collection("assetClasses");
-            let assetClasses = yield collectionAssetClasses.find({}).toArray();
-            for (let i = 0; i < assetClasses.length; i++) {
-                let total = 0;
-                let newAccounts = assetClasses[i].accounts;
-                for (let j = 0; j < newAccounts.length; j++) {
-                    let updatedAccount = yield process_1.processAccount(newAccounts[j]);
-                    total += updatedAccount.totalBalance;
-                    console.log("total updated");
-                    console.log(updatedAccount.totalBalance);
-                    newAccounts[j] = updatedAccount;
-                }
-                yield collectionAssetClasses.updateOne({ id: assetClasses[i].id }, {
-                    $set: {
-                        accounts: newAccounts,
-                        totalValue: total,
-                    },
-                });
-            }
+            tracker_1.refreshAllAccounts();
             yield collectionAssetClasses
                 .find({})
                 .toArray((err, data) => {

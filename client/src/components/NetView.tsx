@@ -1,25 +1,21 @@
 import { connect } from "react-redux";
 import { AssetClass } from "../models/assetClass";
+import BalanceHistory from "../models/balanceHistory";
 import { RootState } from "../store/store";
 import { getMonths } from "../utils";
 import Graph from "./Graph";
 
 interface PropsNetView {
   assetClasses: AssetClass[];
+  totalValueInfo: BalanceHistory[];
 }
 
 function NetView(props: PropsNetView) {
-  const data = {
-    labels: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.name),
-    values: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.totalValue),
-    colors: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.color),
-  };
+  let totals: number[] = [];
+  props.totalValueInfo.map((i: BalanceHistory) => {
+    totals.push(i.total);
+  });
+
   return (
     <div className="card">
       <div className="card-header">Total Value</div>
@@ -28,9 +24,9 @@ function NetView(props: PropsNetView) {
           <Graph
             chartId="netChart"
             type="line"
-            labels={getMonths(12)}
-            data={data.values}
-            colors={[data.colors[0]]}
+            // labels={getMonths(12)}
+            data={totals}
+            colors={["#ff00ff"]}
             fill={false}
             width={800}
             height={400}
@@ -42,7 +38,10 @@ function NetView(props: PropsNetView) {
 }
 
 function mapStateToProps(state: RootState) {
-  return { assetClasses: state.classReducer.assetClasses };
+  return {
+    assetClasses: state.classReducer.assetClasses,
+    totalValueInfo: state.totalValueReducer.totalValueInfo,
+  };
 }
 
 export default connect(mapStateToProps)(NetView);

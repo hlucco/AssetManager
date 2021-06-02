@@ -13,6 +13,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import NetView from "./components/NetView";
 import { userInfo } from "node:os";
+import { getHistory } from "./store/totalValueSlice";
 
 interface PropsApp {
   userInfo: any;
@@ -27,12 +28,7 @@ function App(props: PropsApp) {
     const asyncHandler = async () => {
       await dispatch(fetchClasses());
       await dispatch(getUserInfo());
-
-      if (props.userInfo.sync) {
-        setInterval(() => {
-          dispatch(refreshAll());
-        }, 300000);
-      }
+      await dispatch(getHistory());
     };
 
     asyncHandler();
@@ -45,6 +41,13 @@ function App(props: PropsApp) {
       toggleMenu(true);
     }
   }, []);
+
+  //   if (props.userInfo.sync) {
+  //     console.log("sync on");
+  //     setInterval(() => {
+  //       dispatch(refreshAll());
+  //     }, 300000);
+  //   }
 
   const [menuVisible, toggleMenu] = useState(false);
 

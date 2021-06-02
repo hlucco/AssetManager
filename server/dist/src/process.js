@@ -72,12 +72,4 @@ function processAccount(account) {
     });
 }
 exports.processAccount = processAccount;
-//NEXT STEPS:
-//worker process which updates account data every hour calling the plaid apis
-//this way when you log in it doesnt take ages to refresh. This worker process will
-//update the json file which is holding the state
-//figure out how to add special reducer cases in redux to get loading icon to spin
-//total money amount formatter to add comas where they need to be
-//get mongo to actually save
-//line graph display which shows portfolio value every update so history can be seen
 //# sourceMappingURL=process.js.map

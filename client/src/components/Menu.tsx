@@ -45,7 +45,7 @@ function Menu(props: PropsMenu) {
             <IconLayers />
             <span>Classes</span>
           </div>
-          <div className="menu-item" onClick={() => dispatch(updateUserSync())}>
+          {/* <div className="menu-item" onClick={() => dispatch(updateUserSync())}>
             <div className="sync-toggle">
               <div className="sync-container">
                 <IconSync />
@@ -53,7 +53,7 @@ function Menu(props: PropsMenu) {
               </div>
               <ToggleSwitch checked={props.userInfo.sync} onChange={() => {}} />
             </div>
-          </div>
+          </div> */}
           <div onClick={() => dispatch(logout())} className="menu-item">
             <IconLogout />
             <span>Logout</span>

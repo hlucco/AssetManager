@@ -4,6 +4,7 @@ import classReducer from "./classSlice";
 import plaidReducer from "./plaidSlice";
 import coinbaseReducer from "./coinbaseSlice";
 import userReducer from "./userSlice";
+import totalValueReducer from "./totalValueSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     plaidReducer: plaidReducer,
     coinbaseReducer: coinbaseReducer,
     userReducer: userReducer,
+    totalValueReducer: totalValueReducer,
   },
 });
 

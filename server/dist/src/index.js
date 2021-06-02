@@ -10,15 +10,19 @@ const asset_1 = __importDefault(require("./asset"));
 const account_1 = __importDefault(require("./account"));
 const coinbase_1 = __importDefault(require("./connectors/coinbase"));
 const user_1 = __importDefault(require("./user"));
+const tracker_1 = require("./tracker");
+const total_1 = __importDefault(require("./total"));
 const port = 6023;
 const app = express_1.default();
 app.use(body_parser_1.default.json());
+tracker_1.initTracker();
 //Controllers
 app.use("/plaid", plaid_1.default);
 app.use("/assets", asset_1.default);
 app.use("/account", account_1.default);
 app.use("/coinbase", coinbase_1.default);
 app.use("/user", user_1.default);
+app.use("/total", total_1.default);
 app.listen(port, () => {
     console.log(`Server listening at port ${port}`);
 });

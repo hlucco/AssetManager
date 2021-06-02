@@ -129,6 +129,7 @@ function ClassesMenuview(props: PropsClassesMenuView) {
                   id: uuidv4(),
                   totalValue: 0,
                   color: colorList[0],
+                  balanceHistory: [],
                 };
                 await dispatch(addClass(body));
                 setNewClass("");

@@ -136,13 +136,13 @@ function AccountsMenuView(props: PropsAccountMenuView) {
           <IconArrowLeft />
         </span>
         <h1>Accounts</h1>
-        {/* <span
+        <span
           onClick={() => {
             dispatch(refreshAll());
           }}
         >
           <IconSync />
-        </span> */}
+        </span>
       </div>
       {renderAccountList(props.assetClasses, dispatch)}
       {adding ? (

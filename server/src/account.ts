@@ -4,6 +4,7 @@ import MongoClient from "mongodb";
 import { PortfolioAccount } from "../models/portfolioAccount";
 import { processAccount } from "./process";
 import { saveAccessToken } from "./utils";
+import { refreshAllAccounts } from "./tracker";
 
 const url = process.env.MONGO_URL;
 const dbName = "PortfolioManagerDB";
@@ -123,30 +124,8 @@ router.get("/refresh", async (req, res) => {
       if (error === null) {
         const db: MongoClient.Db = client.db(dbName);
         const collectionAssetClasses = db.collection("assetClasses");
-        let assetClasses = await collectionAssetClasses.find({}).toArray();
 
-        for (let i = 0; i < assetClasses.length; i++) {
-          let total = 0;
-          let newAccounts = assetClasses[i].accounts;
-
-          for (let j = 0; j < newAccounts.length; j++) {
-            let updatedAccount = await processAccount(newAccounts[j]);
-            total += updatedAccount.totalBalance;
-            console.log("total updated");
-            console.log(updatedAccount.totalBalance);
-            newAccounts[j] = updatedAccount;
-          }
-
-          await collectionAssetClasses.updateOne(
-            { id: assetClasses[i].id },
-            {
-              $set: {
-                accounts: newAccounts,
-                totalValue: total,
-              },
-            }
-          );
-        }
+        refreshAllAccounts();
 
         await collectionAssetClasses
           .find({})
