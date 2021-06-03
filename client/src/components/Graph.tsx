@@ -82,6 +82,8 @@ function Graph(props: PropsGraph) {
                   {
                     ticks: {
                       fontColor: "#b5b5b5",
+                      // autoSkip: true,
+                      // maxTicksLimit: 20,
                     },
                   },
                 ],

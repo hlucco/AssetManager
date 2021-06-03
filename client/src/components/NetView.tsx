@@ -12,8 +12,11 @@ interface PropsNetView {
 
 function NetView(props: PropsNetView) {
   let totals: number[] = [];
+  let dates: string[] = [];
   props.totalValueInfo.map((i: BalanceHistory) => {
     totals.push(i.total);
+    let date = new Date(i.date);
+    dates.push(date.toUTCString());
   });
 
   return (
@@ -24,9 +27,9 @@ function NetView(props: PropsNetView) {
           <Graph
             chartId="netChart"
             type="line"
-            // labels={getMonths(12)}
+            labels={dates}
             data={totals}
-            colors={["#ff00ff"]}
+            colors={[(props.assetClasses[0] || {}).color]}
             fill={false}
             width={800}
             height={400}
