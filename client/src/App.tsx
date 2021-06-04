@@ -14,9 +14,12 @@ import { connect } from "react-redux";
 import NetView from "./components/NetView";
 import { userInfo } from "node:os";
 import { getHistory } from "./store/totalValueSlice";
+import { AssetClass } from "./models/assetClass";
+import React from "react";
 
 interface PropsApp {
   userInfo: any;
+  assetClasses: AssetClass[];
 }
 
 function App(props: PropsApp) {
@@ -63,10 +66,16 @@ function App(props: PropsApp) {
         <IconMenu />
       </div>
       <div className="container">
-        <AssetsView />
-        <CreditView />
-        <AccountListView />
-        <NetView />
+        {props.assetClasses.length === 0 ? (
+          <span>No existing assets</span>
+        ) : (
+          <React.Fragment>
+            <AssetsView />
+            <CreditView />
+            <AccountListView />
+            <NetView />
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
@@ -75,6 +84,7 @@ function App(props: PropsApp) {
 function mapStateToProps(state: RootState) {
   return {
     userInfo: state.userReducer.userInfo,
+    assetClasses: state.classReducer.assetClasses,
   };
 }
 

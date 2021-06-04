@@ -7,10 +7,13 @@ export const login = createAsyncThunk("/api/user/login", async (body: any) => {
   return response.data;
 });
 
-export const register = createAsyncThunk("/api/user", async (body: any) => {
-  const response = await axios.post("/api/user/register", body);
-  return response.data;
-});
+export const register = createAsyncThunk(
+  "/api/user/register",
+  async (body: any) => {
+    const response = await axios.post("/api/user/register", body);
+    return response.data;
+  }
+);
 
 export const logout = createAsyncThunk("/api/user/logout", async () => {
   clearSession();
@@ -69,6 +72,11 @@ export const userSlice = createSlice({
       }
     );
     builder.addCase(login.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.userInfo = action.payload;
+      state.loggedIn = true;
+    });
+    builder.addCase(register.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.userInfo = action.payload;
       state.loggedIn = true;

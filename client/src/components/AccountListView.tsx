@@ -13,20 +13,23 @@ interface PropsAccountListView {
 
 function processHistory(account: PortfolioAccount): ReactNode {
   let currentValue = account.totalBalance;
-  let previousValue =
-    account.balanceHistory[account.balanceHistory.length - 2].total;
-  let dif = currentValue - previousValue;
-  let change = (Math.abs(dif) / previousValue).toFixed(3);
 
-  return (
-    <div
-      className="account-list-item-change"
-      style={dif >= 0 ? { color: "#3b943b" } : { color: "#9c2929" }}
-    >
-      {dif >= 0 ? <IconTrendingUp /> : <IconTrendingDown />}
-      <span>{change}%</span>
-    </div>
-  );
+  if (account.balanceHistory.length > 1) {
+    let previousValue =
+      account.balanceHistory[account.balanceHistory.length - 2].total;
+    let dif = currentValue - previousValue;
+    let change = (Math.abs(dif) / previousValue).toFixed(3);
+    return (
+      <div
+        className="account-list-item-change"
+        style={dif >= 0 ? { color: "#3b943b" } : { color: "#9c2929" }}
+      >
+        {dif >= 0 ? <IconTrendingUp /> : <IconTrendingDown />}
+        <span>{change}%</span>
+      </div>
+    );
+  }
+  return <span className="account-list-item-change">N/A</span>;
 }
 
 function renderAccountsList(props: PropsAccountListView) {
