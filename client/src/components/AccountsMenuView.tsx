@@ -136,13 +136,13 @@ function AccountsMenuView(props: PropsAccountMenuView) {
           <IconArrowLeft />
         </span>
         <h1>Accounts</h1>
-        <span
+        {/* <span
           onClick={() => {
             dispatch(refreshAll());
           }}
         >
           <IconSync />
-        </span>
+        </span> */}
       </div>
       {renderAccountList(props.assetClasses, dispatch)}
       {adding ? (
@@ -211,6 +211,7 @@ function AccountsMenuView(props: PropsAccountMenuView) {
                       ? props.coinbaseInfo.refresh_token
                       : "",
                   id: uuidv4(),
+                  balanceHistory: [],
                 };
 
                 await dispatch(addAccount(body));

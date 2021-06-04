@@ -28,6 +28,7 @@ router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function*
         accountDetails: {},
         totalBalance: 0,
         id: req.body.id,
+        balanceHistory: [],
     };
     yield utils_1.saveAccessToken(newAccount.id, req.body.access_token, req.body.refresh_token);
     newAccount = yield process_1.processAccount(newAccount);

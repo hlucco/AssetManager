@@ -35,10 +35,13 @@ export async function processAccount(
         totalValue += j.balances.current;
       }
     });
+    let newBalanceHistory = account.balanceHistory;
+    newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });
     account = {
       ...account,
       accountDetails: i,
       totalBalance: totalValue,
+      balanceHistory: newBalanceHistory,
     };
   } else {
     let oldTokenObject: AccessToken = await lookupAccessToken(account.id);
@@ -67,10 +70,13 @@ export async function processAccount(
         totalValue += j.balance.amount * etherValue;
       }
     });
+    let newBalanceHistory = account.balanceHistory;
+    newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });
     account = {
       ...account,
       accountDetails: accountDetails,
       totalBalance: totalValue,
+      balanceHistory: newBalanceHistory,
     };
   }
 

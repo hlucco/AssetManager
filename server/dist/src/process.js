@@ -43,7 +43,9 @@ function processAccount(account) {
                     totalValue += j.balances.current;
                 }
             });
-            account = Object.assign(Object.assign({}, account), { accountDetails: i, totalBalance: totalValue });
+            let newBalanceHistory = account.balanceHistory;
+            newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });
+            account = Object.assign(Object.assign({}, account), { accountDetails: i, totalBalance: totalValue, balanceHistory: newBalanceHistory });
         }
         else {
             let oldTokenObject = yield utils_1.lookupAccessToken(account.id);
@@ -66,7 +68,9 @@ function processAccount(account) {
                     totalValue += j.balance.amount * etherValue;
                 }
             });
-            account = Object.assign(Object.assign({}, account), { accountDetails: accountDetails, totalBalance: totalValue });
+            let newBalanceHistory = account.balanceHistory;
+            newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });
+            account = Object.assign(Object.assign({}, account), { accountDetails: accountDetails, totalBalance: totalValue, balanceHistory: newBalanceHistory });
         }
         return account;
     });

@@ -19,6 +19,7 @@ router.post("/create", async (req, res) => {
     accountDetails: {},
     totalBalance: 0,
     id: req.body.id,
+    balanceHistory: [],
   };
 
   await saveAccessToken(
