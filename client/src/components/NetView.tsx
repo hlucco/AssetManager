@@ -16,7 +16,7 @@ function NetView(props: PropsNetView) {
   props.totalValueInfo.map((i: BalanceHistory) => {
     totals.push(i.total);
     let date = new Date(i.date);
-    dates.push(date.toUTCString());
+    dates.push(date.toUTCString().slice(5, 16));
   });
 
   return (
@@ -32,7 +32,7 @@ function NetView(props: PropsNetView) {
             colors={[(props.assetClasses[0] || {}).color]}
             fill={false}
             width={800}
-            height={400}
+            height={300}
           />
         </div>
       </div>

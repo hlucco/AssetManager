@@ -75,6 +75,8 @@ function Graph(props: PropsGraph) {
                       fontColor: "#b5b5b5",
                       // stepSize: 1,
                       // beginAtZero: true,
+                      autoSkip: true,
+                      maxTicksLimit: 5,
                     },
                   },
                 ],
@@ -82,8 +84,10 @@ function Graph(props: PropsGraph) {
                   {
                     ticks: {
                       fontColor: "#b5b5b5",
-                      // autoSkip: true,
-                      // maxTicksLimit: 20,
+                      autoSkip: true,
+                      maxTicksLimit: 3,
+                      maxRotation: 0,
+                      minRotation: 0,
                     },
                   },
                 ],
