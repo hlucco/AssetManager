@@ -67,6 +67,9 @@ function processAccount(account) {
                 else if (j.currency.code === "ETH") {
                     totalValue += j.balance.amount * etherValue;
                 }
+                else if (j.currency.code === "USDC") {
+                    totalValue += j.balance.amount * 1;
+                }
             });
             let newBalanceHistory = account.balanceHistory;
             newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });

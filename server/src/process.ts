@@ -4,6 +4,7 @@ import { lookupAccessToken, refreshCoinbaseToken } from "./utils";
 import axios, { AxiosRequestConfig } from "axios";
 import { AccessToken } from "../models/accessToken";
 import { etherToUSD, bitcoinToUSD } from "./connectors/coinbase";
+import { json } from "body-parser";
 
 // export async function processAssetClass(assetClass: AssetClass): Promise<AssetClass> {
 //     let totalValue: number = 0;
@@ -68,6 +69,8 @@ export async function processAccount(
         totalValue += j.balance.amount * bitCoinValue;
       } else if (j.currency.code === "ETH") {
         totalValue += j.balance.amount * etherValue;
+      } else if (j.currency.code === "USDC") {
+        totalValue += j.balance.amount * 1;
       }
     });
     let newBalanceHistory = account.balanceHistory;
