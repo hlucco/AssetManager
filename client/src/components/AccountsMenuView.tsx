@@ -23,7 +23,6 @@ import IconSync from "./icons/iconSync";
 import {
   addAccount,
   deleteAccount,
-  refreshAll,
   updateAccount,
 } from "../store/classSlice";
 

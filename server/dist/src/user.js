@@ -38,7 +38,7 @@ router.post("/register", (req, res) => {
             const newUser = {
                 username: req.body.username,
                 password: hashedPassword,
-                id: uuid_1.v4(),
+                id: (0, uuid_1.v4)(),
                 assets: [],
                 sync: false,
             };

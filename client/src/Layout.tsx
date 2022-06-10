@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import App from "./App";
 import Login from "./components/Login";
 import { AssetClass } from "./models/assetClass";
-import store, { RootState, useAppDispatch } from "./store/store";
+import { RootState, useAppDispatch } from "./store/store";
 import { loggedIn } from "./store/userSlice";
 import "./styles/index.scss";
 import { useToken } from "./utils";

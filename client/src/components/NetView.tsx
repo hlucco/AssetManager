@@ -2,7 +2,6 @@ import { connect } from "react-redux";
 import { AssetClass } from "../models/assetClass";
 import BalanceHistory from "../models/balanceHistory";
 import { RootState } from "../store/store";
-import { getMonths } from "../utils";
 import Graph from "./Graph";
 
 interface PropsNetView {

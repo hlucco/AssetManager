@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 import { AppDispatch, RootState, useAppDispatch } from "../store/store";
 import IconX from "./icons/IconX";
 import colorList from "../resources/colorList.json";
-import { HexColorPicker, HexColorInput } from "react-colorful";
+import { HexColorPicker } from "react-colorful";
 import { useOutsideAlerter } from "../utils";
 
 interface PropsClassesMenuView {

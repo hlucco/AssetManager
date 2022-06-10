@@ -13,9 +13,9 @@ const user_1 = __importDefault(require("./user"));
 const tracker_1 = require("./tracker");
 const total_1 = __importDefault(require("./total"));
 const port = 6023;
-const app = express_1.default();
+const app = (0, express_1.default)();
 app.use(body_parser_1.default.json());
-tracker_1.initTracker();
+(0, tracker_1.initTracker)();
 //Controllers
 app.use("/plaid", plaid_1.default);
 app.use("/assets", asset_1.default);

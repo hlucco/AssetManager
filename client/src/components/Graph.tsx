@@ -1,6 +1,5 @@
-import React, { Ref, RefObject, useEffect } from "react";
+import React, { RefObject, useEffect } from "react";
 import { Chart } from "chart.js";
-import colorList from "../resources/colorList.json";
 
 interface PropsGraph {
   chartId: string;
@@ -69,29 +68,29 @@ function Graph(props: PropsGraph) {
         scales:
           props.type === "line"
             ? {
-                yAxes: [
-                  {
-                    ticks: {
-                      fontColor: "#b5b5b5",
-                      // stepSize: 1,
-                      // beginAtZero: true,
-                      autoSkip: true,
-                      maxTicksLimit: 5,
-                    },
+              yAxes: [
+                {
+                  ticks: {
+                    fontColor: "#b5b5b5",
+                    // stepSize: 1,
+                    // beginAtZero: true,
+                    autoSkip: true,
+                    maxTicksLimit: 5,
                   },
-                ],
-                xAxes: [
-                  {
-                    ticks: {
-                      fontColor: "#b5b5b5",
-                      autoSkip: true,
-                      maxTicksLimit: 3,
-                      maxRotation: 0,
-                      minRotation: 0,
-                    },
+                },
+              ],
+              xAxes: [
+                {
+                  ticks: {
+                    fontColor: "#b5b5b5",
+                    autoSkip: true,
+                    maxTicksLimit: 3,
+                    maxRotation: 0,
+                    minRotation: 0,
                   },
-                ],
-              }
+                },
+              ],
+            }
             : {},
       },
     });

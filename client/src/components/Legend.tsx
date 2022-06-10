@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import colorList from "../resources/colorList.json";
 import { AssetClass } from "../models/assetClass";
 
 interface PropsLegend {

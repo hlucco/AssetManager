@@ -33,7 +33,7 @@ function refreshAllAccounts() {
                 let newAccounts = assetClasses[i].accounts;
                 let balanceHistory = assetClasses[i].balanceHistory;
                 for (let j = 0; j < newAccounts.length; j++) {
-                    let updatedAccount = yield process_1.processAccount(newAccounts[j]);
+                    let updatedAccount = yield (0, process_1.processAccount)(newAccounts[j]);
                     total += updatedAccount.totalBalance;
                     console.log("total updated");
                     console.log(updatedAccount.totalBalance);

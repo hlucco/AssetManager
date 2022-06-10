@@ -1,13 +1,11 @@
 import { useState } from "react";
 import { connect } from "react-redux";
-import { UserInfo } from "../models/userInfo";
 import { RootState, useAppDispatch } from "../store/store";
-import { getUserInfo, login, register } from "../store/userSlice";
+import { login, register } from "../store/userSlice";
 import IconAlertCircle from "./icons/IconAlertCircle";
 import IconArrowRightCircle from "./icons/IconArrowRightCircle";
 import IconCheckCircle from "./icons/IconCheckCircle";
 import IconUserPlus from "./icons/IconUserPlus";
-import IconX from "./icons/IconX";
 import TextInput from "./TextInput";
 
 interface PropsLogin {

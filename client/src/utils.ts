@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AssetClass } from "./models/assetClass";
 
 export function useOutsideAlerter(ref: any, handler: any) {
   useEffect(() => {

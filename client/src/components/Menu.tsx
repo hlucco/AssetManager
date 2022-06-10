@@ -3,12 +3,10 @@ import AccountsMenuView from "./AccountsMenuView";
 import ClassesMenuview from "./ClassesMenuView";
 import IconDollar from "./icons/IconDollar";
 import IconLayers from "./icons/IconLayers";
-import IconSync from "./icons/iconSync";
-import ToggleSwitch from "./ToggleSwitch";
 import { RootState, useAppDispatch } from "../store/store";
 import { connect } from "react-redux";
 import IconLogout from "./icons/IconLogout";
-import { logout, updateUserSync } from "../store/userSlice";
+import { logout } from "../store/userSlice";
 
 interface PropsMenu {
   userInfo: any;

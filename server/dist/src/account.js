@@ -30,8 +30,8 @@ router.post("/create", (req, res) => __awaiter(void 0, void 0, void 0, function*
         id: req.body.id,
         balanceHistory: [],
     };
-    yield utils_1.saveAccessToken(newAccount.id, req.body.access_token, req.body.refresh_token);
-    newAccount = yield process_1.processAccount(newAccount);
+    yield (0, utils_1.saveAccessToken)(newAccount.id, req.body.access_token, req.body.refresh_token);
+    newAccount = yield (0, process_1.processAccount)(newAccount);
     mongodb_1.default.connect(url, (error, client) => __awaiter(void 0, void 0, void 0, function* () {
         if (error === null) {
             const db = client.db(dbName);
@@ -82,7 +82,7 @@ router.get("/update/:accountId/:assetId", (req, res) => __awaiter(void 0, void 0
                 let updatedAccount = existing.accounts.find((account) => account.id === req.params.accountId);
                 let index = newAccounts.indexOf(updatedAccount);
                 let newTotalValue = existing.totalValue - updatedAccount.totalBalance;
-                updatedAccount = yield process_1.processAccount(updatedAccount);
+                updatedAccount = yield (0, process_1.processAccount)(updatedAccount);
                 newAccounts[index] = updatedAccount;
                 yield collectionAssetClasses.updateOne({ id: req.params.assetId }, {
                     $set: {
@@ -108,7 +108,7 @@ router.get("/refresh", (req, res) => __awaiter(void 0, void 0, void 0, function*
         if (error === null) {
             const db = client.db(dbName);
             const collectionAssetClasses = db.collection("assetClasses");
-            tracker_1.refreshAllAccounts();
+            (0, tracker_1.refreshAllAccounts)();
             yield collectionAssetClasses
                 .find({})
                 .toArray((err, data) => {

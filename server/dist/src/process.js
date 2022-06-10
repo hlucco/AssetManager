@@ -33,7 +33,7 @@ function processAccount(account) {
     return __awaiter(this, void 0, void 0, function* () {
         let totalValue = 0;
         if (account.type === "plaid") {
-            let tokenObject = yield utils_1.lookupAccessToken(account.id);
+            let tokenObject = yield (0, utils_1.lookupAccessToken)(account.id);
             let i = yield plaid_1.client.getAccounts(tokenObject.accessToken);
             i.accounts.forEach((j) => {
                 if (account.asset_class === "Credit") {
@@ -48,8 +48,8 @@ function processAccount(account) {
             account = Object.assign(Object.assign({}, account), { accountDetails: i, totalBalance: totalValue, balanceHistory: newBalanceHistory });
         }
         else {
-            let oldTokenObject = yield utils_1.lookupAccessToken(account.id);
-            let newTokenObject = yield utils_1.refreshCoinbaseToken(oldTokenObject);
+            let oldTokenObject = yield (0, utils_1.lookupAccessToken)(account.id);
+            let newTokenObject = yield (0, utils_1.refreshCoinbaseToken)(oldTokenObject);
             const config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -58,8 +58,8 @@ function processAccount(account) {
             };
             let response = yield axios_1.default.get(`https://api.coinbase.com/v2/accounts`, config);
             let accountDetails = response.data;
-            let bitCoinValue = yield coinbase_1.bitcoinToUSD();
-            let etherValue = yield coinbase_1.etherToUSD();
+            let bitCoinValue = yield (0, coinbase_1.bitcoinToUSD)();
+            let etherValue = yield (0, coinbase_1.etherToUSD)();
             accountDetails.data.forEach((j) => {
                 if (j.currency.code === "BTC") {
                     totalValue += j.balance.amount * bitCoinValue;
