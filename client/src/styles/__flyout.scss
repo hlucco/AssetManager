@@ -1,7 +1,7 @@
 @import "./variables.scss";
 
 .flyout-container {
-  width: 25vw;
+  width: 431px;
   height: 100vh;
   position: fixed;
   top: 0;
@@ -9,10 +9,11 @@
   z-index: 200;
   transition: transform 0.3s cubic-bezier(0, 0.52, 0, 1);
   z-index: 1000;
-  background-color: $secondary-background-color;
+  background-color: $menu-background;
+  box-shadow: $cardshadowII;
 
   &.flyout-hide {
-    transform: translate3d(-30vw, 0, 0);
+    transform: translate3d(-500px, 0, 0);
   }
 
   &.flyout-show {

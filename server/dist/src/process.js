@@ -33,7 +33,7 @@ function processAccount(account) {
     return __awaiter(this, void 0, void 0, function* () {
         let totalValue = 0;
         if (account.type === "plaid") {
-            let tokenObject = yield utils_1.lookupAccessToken(account.id);
+            let tokenObject = yield (0, utils_1.lookupAccessToken)(account.id);
             let i = yield plaid_1.client.getAccounts(tokenObject.accessToken);
             i.accounts.forEach((j) => {
                 if (account.asset_class === "Credit") {
@@ -43,11 +43,13 @@ function processAccount(account) {
                     totalValue += j.balances.current;
                 }
             });
-            account = Object.assign(Object.assign({}, account), { accountDetails: i, totalBalance: totalValue });
+            let newBalanceHistory = account.balanceHistory;
+            newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });
+            account = Object.assign(Object.assign({}, account), { accountDetails: i, totalBalance: totalValue, balanceHistory: newBalanceHistory });
         }
         else {
-            let oldTokenObject = yield utils_1.lookupAccessToken(account.id);
-            let newTokenObject = yield utils_1.refreshCoinbaseToken(oldTokenObject);
+            let oldTokenObject = yield (0, utils_1.lookupAccessToken)(account.id);
+            let newTokenObject = yield (0, utils_1.refreshCoinbaseToken)(oldTokenObject);
             const config = {
                 headers: {
                     "Content-Type": "application/json",
@@ -56,8 +58,8 @@ function processAccount(account) {
             };
             let response = yield axios_1.default.get(`https://api.coinbase.com/v2/accounts`, config);
             let accountDetails = response.data;
-            let bitCoinValue = yield coinbase_1.bitcoinToUSD();
-            let etherValue = yield coinbase_1.etherToUSD();
+            let bitCoinValue = yield (0, coinbase_1.bitcoinToUSD)();
+            let etherValue = yield (0, coinbase_1.etherToUSD)();
             accountDetails.data.forEach((j) => {
                 if (j.currency.code === "BTC") {
                     totalValue += j.balance.amount * bitCoinValue;
@@ -65,19 +67,16 @@ function processAccount(account) {
                 else if (j.currency.code === "ETH") {
                     totalValue += j.balance.amount * etherValue;
                 }
+                else if (j.currency.code === "USDC") {
+                    totalValue += j.balance.amount * 1;
+                }
             });
-            account = Object.assign(Object.assign({}, account), { accountDetails: accountDetails, totalBalance: totalValue });
+            let newBalanceHistory = account.balanceHistory;
+            newBalanceHistory.push({ date: new Date(Date.now()), total: totalValue });
+            account = Object.assign(Object.assign({}, account), { accountDetails: accountDetails, totalBalance: totalValue, balanceHistory: newBalanceHistory });
         }
         return account;
     });
 }
 exports.processAccount = processAccount;
-//NEXT STEPS:
-//worker process which updates account data every hour calling the plaid apis
-//this way when you log in it doesnt take ages to refresh. This worker process will
-//update the json file which is holding the state
-//figure out how to add special reducer cases in redux to get loading icon to spin
-//total money amount formatter to add comas where they need to be
-//get mongo to actually save
-//line graph display which shows portfolio value every update so history can be seen
 //# sourceMappingURL=process.js.map

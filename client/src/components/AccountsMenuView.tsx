@@ -20,7 +20,11 @@ import { v4 as uuidv4 } from "uuid";
 import { PortfolioAccount } from "../models/portfolioAccount";
 import { exchangeToken, requestLink } from "../store/coinbaseSlice";
 import IconSync from "./icons/iconSync";
-import { addAccount, deleteAccount, updateAccount } from "../store/classSlice";
+import {
+  addAccount,
+  deleteAccount,
+  updateAccount,
+} from "../store/classSlice";
 
 interface PropsAccountMenuView {
   setView: Dispatch<SetStateAction<string>>;
@@ -131,6 +135,13 @@ function AccountsMenuView(props: PropsAccountMenuView) {
           <IconArrowLeft />
         </span>
         <h1>Accounts</h1>
+        {/* <span
+          onClick={() => {
+            dispatch(refreshAll());
+          }}
+        >
+          <IconSync />
+        </span> */}
       </div>
       {renderAccountList(props.assetClasses, dispatch)}
       {adding ? (
@@ -199,6 +210,7 @@ function AccountsMenuView(props: PropsAccountMenuView) {
                       ? props.coinbaseInfo.refresh_token
                       : "",
                   id: uuidv4(),
+                  balanceHistory: [],
                 };
 
                 await dispatch(addAccount(body));

@@ -1,0 +1,30 @@
+@import "./variables.scss";
+
+.card {
+  background-color: $card-background;
+  box-shadow: $cardshadowII;
+  border-radius: 15px;
+  padding: 2rem 1rem 2rem 1rem;
+  margin: 1rem 1rem 1rem 1rem;
+  align-items: center;
+
+  &:hover {
+    // transform: scale(1.01);
+  }
+
+  .card-header {
+    text-align: center;
+  }
+
+  .card-content {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+
+    .card-item {
+      margin: 2rem;
+    }
+  }
+}

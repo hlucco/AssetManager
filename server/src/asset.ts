@@ -1,88 +1,131 @@
 import express from "express";
-import MongoClient from 'mongodb';
-import { AssetClass } from '../models/assetClass';
+import MongoClient from "mongodb";
+import { AssetClass } from "../models/assetClass";
 // import { processAssetClass } from "./process";
 
 const router = express.Router();
 
 const url = process.env.MONGO_URL;
-const dbName = 'PortfolioManagerDB';
+const dbName = "PortfolioManagerDB";
 
 //Get all asset classes for a given account
-router.get('/', (req, res) => {
-    MongoClient.connect(url, (error: Error, client: MongoClient.MongoClient) => {
-        if (error === null) {
-            const db: MongoClient.Db  = client.db(dbName); 
-            const collectionAssetClasses = db.collection('assetClasses');
-            collectionAssetClasses.find({}).toArray(async (err: Error, data:[]) => {
-                res.json(data);
-            }); 
+router.get("/", (req, res) => {
+  MongoClient.connect(url, (error: Error, client: MongoClient.MongoClient) => {
+    if (error === null) {
+      const db: MongoClient.Db = client.db(dbName);
+      const collectionAssetClasses = db.collection("assetClasses");
+      collectionAssetClasses.find({}).toArray(async (err: Error, data: []) => {
+        res.json(data);
+      });
+    } else {
+      console.log(error);
+    }
+    client.close();
+  });
+});
+
+router.post("/", (req, res) => {
+  MongoClient.connect(
+    url,
+    async (error: Error, client: MongoClient.MongoClient) => {
+      console.log("connected to mongo client");
+      if (error === null) {
+        const db: MongoClient.Db = client.db(dbName);
+        const collectionAssetClasses = db.collection("assetClasses");
+        const newClass: AssetClass = req.body;
+
+        let existing = await collectionAssetClasses.findOne({
+          name: newClass.name,
+        });
+
+        if (existing !== null) {
+          //already exists
+          res.status(400).send("Already exists");
+        } else {
+          //make a new one
+          await collectionAssetClasses.insertOne(newClass);
+
+          await collectionAssetClasses
+            .find({})
+            .toArray((err: Error, data: []) => {
+              res.json(data);
+            });
         }
-        else {
-            console.log(error);
+      } else {
+        console.log(error);
+      }
+      client.close();
+    }
+  );
+});
+
+router.put("/:assetId", (req, res) => {
+  MongoClient.connect(
+    url,
+    async (error: Error, client: MongoClient.MongoClient) => {
+      if (error === null) {
+        const db: MongoClient.Db = client.db(dbName);
+        const collectionAssetClasses = db.collection("assetClasses");
+        const assetId = req.params.assetId;
+
+        let existing = await collectionAssetClasses.findOne({ id: assetId });
+
+        if (existing === null) {
+          //asset class does not exist already exists
+          res.status(400).send("Class does not exist");
         }
-        client.close();
-    })
-})
 
-router.post('/', (req, res) => {
-    MongoClient.connect(url, async (error: Error, client: MongoClient.MongoClient) => {
-        console.log("connected to mongo client");
-        if (error === null) {
-            const db: MongoClient.Db  = client.db(dbName); 
-            const collectionAssetClasses = db.collection('assetClasses');
-            const newClass: AssetClass = req.body;
+        let updatedClass = req.body;
+        delete updatedClass._id;
 
-            let existing = await collectionAssetClasses.findOne({name: newClass.name});
+        await collectionAssetClasses.updateOne(
+          { id: assetId },
+          { $set: updatedClass }
+        );
 
-            if (existing !== null) {
-                //already exists
-                res.status(400).send('Already exists')
-            } 
-            else {
-                //make a new one
-                await collectionAssetClasses.insertOne(newClass);
+        await collectionAssetClasses
+          .find({})
+          .toArray((err: Error, data: []) => {
+            res.json(data);
+          });
+      } else {
+        console.log(error);
+      }
+      client.close();
+    }
+  );
+});
 
-                await collectionAssetClasses.find({}).toArray((err: Error, data:[]) => {
-                    res.json(data);
-                });
-            }
+router.delete("/:assetId", (req, res) => {
+  MongoClient.connect(
+    url,
+    async (error: Error, client: MongoClient.MongoClient) => {
+      if (error === null) {
+        const db: MongoClient.Db = client.db(dbName);
+        const collectionAssetClasses = db.collection("assetClasses");
+        const assetId = req.params.assetId;
+
+        let existing = await collectionAssetClasses.findOne({ id: assetId });
+
+        if (existing === null) {
+          //already exists
+          res.status(404).send("Class does not exist");
+        } else {
+          //delete
+          await collectionAssetClasses.deleteOne({ id: assetId });
+
+          await collectionAssetClasses
+            .find({})
+            .toArray((err: Error, data: []) => {
+              res.json(data);
+            });
         }
-        else {
-            console.log(error);
-        }
-        client.close();
-    })
-})
+      } else {
+        console.log(error);
+      }
+      client.close();
+    }
+  );
+});
 
-router.delete('/:assetId', (req, res) => {
-    MongoClient.connect(url, async (error: Error, client: MongoClient.MongoClient) => {
-        if (error === null) {
-            const db: MongoClient.Db  = client.db(dbName); 
-            const collectionAssetClasses = db.collection('assetClasses');
-            const assetId = req.params.assetId;
-
-            let existing = await collectionAssetClasses.findOne({id: assetId});
-
-            if (existing === null) {
-                //already exists
-                res.status(404).send('Class does not exist')
-            } 
-            else {
-                //delete
-                await collectionAssetClasses.deleteOne({id: assetId});
-
-                await collectionAssetClasses.find({}).toArray((err: Error, data:[]) => {
-                    res.json(data);
-                });
-            }
-        }
-        else {
-            console.log(error);
-        }
-        client.close();
-    })
-})
-
-
-export default router
+export default router;

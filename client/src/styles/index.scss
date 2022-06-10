@@ -5,6 +5,10 @@
 @import "./variables.scss";
 @import "./accountMenu.scss";
 @import "./_radioButton";
+@import "./_card";
+@import "./accountList.scss";
+@import "./_toggleswitch";
+@import "./login.scss";
 
 body {
   background-color: $background-color;
@@ -14,8 +18,10 @@ body {
 }
 
 .chart-container {
-  height: 75%;
-  width: 75%;
+  canvas {
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .menu-button-container {
@@ -37,9 +43,11 @@ body {
 .container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 98vh;
-  padding: 0 2rem 0 2rem;
+  flex-wrap: wrap;
+  // flex-direction: column;
+  // align-items: center;
+  padding: 4rem 4rem 4rem 4rem;
+  // height: 100vh;
 }
 
 .legend-container {
@@ -47,6 +55,7 @@ body {
     display: flex;
     align-items: center;
     margin: 1rem 0rem 1rem 0rem;
+    min-width: 127px;
 
     .legend-item-text {
       margin-left: 1rem;
@@ -82,6 +91,7 @@ body {
 
     h1 {
       margin-left: 1rem;
+      margin-right: 1.5rem;
     }
   }
 
@@ -211,4 +221,32 @@ body {
 .button-primary {
   height: 2rem;
   cursor: pointer;
+}
+
+.menu-item-circle {
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.class-color-picker-container {
+  position: absolute;
+  margin-top: 1rem;
+  margin-left: -11rem;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sync-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sync-toggle {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }

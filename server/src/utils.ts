@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from "axios";
+import keys from "../keys";
 import MongoClient from "mongodb";
 import { AccessToken } from "../models/accessToken";
 
@@ -44,10 +45,8 @@ export async function refreshCoinbaseToken(
 ): Promise<AccessToken> {
   let body = {
     grant_type: "refresh_token",
-    client_id:
-      "6211ec47d1b3f707173971fcc5a3616693f0293cbdcad76f78ddd68d64cfa11f",
-    client_secret:
-      "972fb3623283329fff01cfae1116bab1764870cc1609f7bea9c4ef08781633ea",
+    client_id: keys.coinbase_client_id,
+    client_secret: keys.coinbase_client_secret,
     refresh_token: tokenObject.refreshToken,
   };
   let response = await axios

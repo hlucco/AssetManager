@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import colorList from "../resources/colorList.json";
 import { AssetClass } from "../models/assetClass";
 
 interface PropsLegend {
@@ -15,7 +14,7 @@ function renderLegend(data: AssetClass[], total: number): ReactNode[] {
       <div className="legend-item-container">
         <div
           className="legend-item-circle"
-          style={{ backgroundColor: colorList[data.indexOf(i)] }}
+          style={{ backgroundColor: i.color }}
         ></div>
         <div className="legend-item-text">
           <span>

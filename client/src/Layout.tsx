@@ -1,84 +1,49 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { connect } from "react-redux";
-import CreditView from "./components/CreditView";
-import Flyout from "./components/Flyout";
-import Graph from "./components/Graph";
-import IconMenu from "./components/icons/IconMenu";
-import Legend from "./components/Legend";
-import Menu from "./components/Menu";
+import App from "./App";
+import Login from "./components/Login";
 import { AssetClass } from "./models/assetClass";
-import { fetchClasses } from "./store/classSlice";
 import { RootState, useAppDispatch } from "./store/store";
+import { loggedIn } from "./store/userSlice";
 import "./styles/index.scss";
+import { useToken } from "./utils";
 
 interface PropsLayout {
   assetClasses: AssetClass[];
+  loggedIn: boolean;
+  logInStatus: string;
 }
 
 function Layout(props: PropsLayout) {
   const dispatch = useAppDispatch();
 
-  let total = 0;
-  props.assetClasses.forEach((i) => {
-    total += i.totalValue;
-  });
-  let totalString = `$${Math.round(total).toString()}`;
-
-  const data = {
-    labels: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.name),
-    values: props.assetClasses
-      .filter((i) => i.name !== "Credit")
-      .map((i) => i.totalValue),
-    total: totalString,
-  };
-
   useEffect(() => {
     const asyncHandler = async () => {
-      await dispatch(fetchClasses());
+      dispatch(loggedIn());
     };
+
     asyncHandler();
-
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-
-    //handle coinbase connector redirect
-    if (urlParams.has("name")) {
-      toggleMenu(true);
-    }
   }, []);
 
-  const [menuVisible, toggleMenu] = useState(false);
+  const { token, setToken } = useToken();
 
-  return (
-    <div className="root">
-      <Flyout visible={menuVisible} toggleFlyout={toggleMenu}>
-        <Menu />
-      </Flyout>
-      <div
-        onClick={() => toggleMenu(!menuVisible)}
-        className="menu-button-container"
-      >
-        <IconMenu />
-      </div>
-      <div className="container">
-        <Legend data={props.assetClasses} total={total} />
-        <Graph
-          chartId="assetChart"
-          type="doughnut"
-          labels={data.labels}
-          centerText={data.total}
-          data={data.values}
-        />
-        <CreditView />
-      </div>
-    </div>
-  );
+  if (props.logInStatus === "idle") {
+    return <div></div>;
+  }
+
+  if (!token || !props.loggedIn) {
+    return <Login setToken={setToken} />;
+  } else {
+    return <App />;
+  }
 }
 
 function mapStateToProps(state: RootState) {
-  return { assetClasses: state.classReducer.assetClasses };
+  return {
+    assetClasses: state.classReducer.assetClasses,
+    loggedIn: state.userReducer.loggedIn,
+    logInStatus: state.userReducer.status,
+  };
 }
 
 export default connect(mapStateToProps)(Layout);

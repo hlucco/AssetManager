@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import AccountsMenuView from "./AccountsMenuView";
-import { AssetClass } from "../models/assetClass";
 import ClassesMenuview from "./ClassesMenuView";
 import IconDollar from "./icons/IconDollar";
 import IconLayers from "./icons/IconLayers";
+import { RootState, useAppDispatch } from "../store/store";
+import { connect } from "react-redux";
+import IconLogout from "./icons/IconLogout";
+import { logout } from "../store/userSlice";
 
-function Menu() {
+interface PropsMenu {
+  userInfo: any;
+}
+
+function Menu(props: PropsMenu) {
   const [view, setView] = useState("menu");
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const queryString = window.location.search;
@@ -35,9 +43,29 @@ function Menu() {
             <IconLayers />
             <span>Classes</span>
           </div>
+          {/* <div className="menu-item" onClick={() => dispatch(updateUserSync())}>
+            <div className="sync-toggle">
+              <div className="sync-container">
+                <IconSync />
+                <span>Sync</span>
+              </div>
+              <ToggleSwitch checked={props.userInfo.sync} onChange={() => {}} />
+            </div>
+          </div> */}
+          <div onClick={() => dispatch(logout())} className="menu-item">
+            <IconLogout />
+            <span>Logout</span>
+          </div>
         </div>
       );
   }
 }
 
-export default Menu;
+function mapStateToProps(state: RootState) {
+  return {
+    assetClasses: state.classReducer.assetClasses,
+    userInfo: state.userReducer.userInfo,
+  };
+}
+
+export default connect(mapStateToProps)(Menu);

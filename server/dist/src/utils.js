@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.refreshCoinbaseToken = exports.saveAccessToken = exports.lookupAccessToken = void 0;
 const axios_1 = __importDefault(require("axios"));
+const keys_1 = __importDefault(require("../keys"));
 const mongodb_1 = __importDefault(require("mongodb"));
 const dbName = "PortfolioManagerDB";
 function lookupAccessToken(accountId) {
@@ -48,8 +49,8 @@ function refreshCoinbaseToken(tokenObject) {
     return __awaiter(this, void 0, void 0, function* () {
         let body = {
             grant_type: "refresh_token",
-            client_id: "6211ec47d1b3f707173971fcc5a3616693f0293cbdcad76f78ddd68d64cfa11f",
-            client_secret: "972fb3623283329fff01cfae1116bab1764870cc1609f7bea9c4ef08781633ea",
+            client_id: keys_1.default.coinbase_client_id,
+            client_secret: keys_1.default.coinbase_client_secret,
             refresh_token: tokenObject.refreshToken,
         };
         let response = yield axios_1.default

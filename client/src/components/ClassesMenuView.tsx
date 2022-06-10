@@ -1,13 +1,23 @@
-import { SetStateAction, Dispatch, ReactNode, useState } from "react";
+import {
+  SetStateAction,
+  Dispatch,
+  ReactNode,
+  useState,
+  useRef,
+  Ref,
+} from "react";
 import IconArrowLeft from "./icons/IconArrowLeft";
 import IconPlus from "./icons/iconPlus";
 import { AssetClass } from "../models/assetClass";
 import TextInput from "./TextInput";
 import { v4 as uuidv4 } from "uuid";
-import { addClass, deleteClass } from "../store/classSlice";
+import { addClass, deleteClass, updateClass } from "../store/classSlice";
 import { connect } from "react-redux";
 import { AppDispatch, RootState, useAppDispatch } from "../store/store";
 import IconX from "./icons/IconX";
+import colorList from "../resources/colorList.json";
+import { HexColorPicker } from "react-colorful";
+import { useOutsideAlerter } from "../utils";
 
 interface PropsClassesMenuView {
   setView: Dispatch<SetStateAction<string>>;
@@ -16,7 +26,10 @@ interface PropsClassesMenuView {
 
 function renderClassList(
   data: AssetClass[],
-  dispatch: AppDispatch
+  dispatch: AppDispatch,
+  colorPickerActive: string,
+  setColorPickerActive: Function,
+  colorPickerRef: Ref<HTMLDivElement>
 ): ReactNode[] {
   let items: ReactNode[] = [];
   data.forEach((i: AssetClass) => {
@@ -24,6 +37,34 @@ function renderClassList(
       <div className="asset-class-item">
         <span>{i.name}</span>
         <div className="asset-buttons-container">
+          <span
+            ref={colorPickerRef}
+            onClick={async (event) => {
+              setColorPickerActive(i.id);
+            }}
+          >
+            <div
+              className="menu-item-circle"
+              style={{ backgroundColor: i.color }}
+            ></div>
+            {colorPickerActive === i.id ? (
+              <div
+                ref={colorPickerRef}
+                className="class-color-picker-container"
+              >
+                <HexColorPicker
+                  color={i.color}
+                  onChange={async (color) => {
+                    let updated = {
+                      ...i,
+                      color: color,
+                    };
+                    await dispatch(updateClass(updated));
+                  }}
+                />
+              </div>
+            ) : null}
+          </span>
           <span
             onClick={async () => {
               await dispatch(deleteClass(i.id));
@@ -41,9 +82,13 @@ function renderClassList(
 
 function ClassesMenuview(props: PropsClassesMenuView) {
   const dispatch = useAppDispatch();
+  const wrapperRef = useRef(null);
 
   const [adding, toggleAdding] = useState(false);
   const [newClass, setNewClass] = useState("");
+  const [colorPickerActive, setColorPickerActive] = useState("");
+
+  useOutsideAlerter(wrapperRef, setColorPickerActive);
 
   const updateText = (e: any) => {
     let value = e.target.value;
@@ -58,7 +103,13 @@ function ClassesMenuview(props: PropsClassesMenuView) {
         </span>
         <h1>Classes</h1>
       </div>
-      {renderClassList(props.assetClasses, dispatch)}
+      {renderClassList(
+        props.assetClasses,
+        dispatch,
+        colorPickerActive,
+        setColorPickerActive,
+        wrapperRef
+      )}
       {adding ? (
         <div className="add-new-class-container">
           <span>Class name:</span>
@@ -77,6 +128,8 @@ function ClassesMenuview(props: PropsClassesMenuView) {
                   accounts: [],
                   id: uuidv4(),
                   totalValue: 0,
+                  color: colorList[0],
+                  balanceHistory: [],
                 };
                 await dispatch(addClass(body));
                 setNewClass("");

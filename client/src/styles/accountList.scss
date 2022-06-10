@@ -1,0 +1,44 @@
+@import "./variables.scss";
+
+.account-list-item-container {
+  display: flex;
+}
+
+.account-list-item {
+  display: flex;
+  background-color: $background-color;
+  border-radius: 0 5px 5px 0;
+  margin: 0rem 0rem 1rem 0rem;
+  padding: 0.5rem 1rem 0.5rem 1rem;
+  min-width: 18rem;
+  box-shadow: $cardshadow;
+
+  span {
+    width: 33%;
+  }
+}
+
+.account-list-class-indicator {
+  height: 35px;
+  width: 0.5rem;
+  border-radius: 5px 0 0 5px;
+}
+
+.account-list-item-change {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .icon {
+    height: 14px;
+
+    svg {
+      height: 14px;
+    }
+  }
+}
+
+.account-list-item-total {
+  align-items: flex-end;
+  text-align: right;
+}
